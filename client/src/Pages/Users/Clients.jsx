@@ -12,9 +12,10 @@ import { IoOpenOutline } from "react-icons/io5";
 import { CiEdit } from "react-icons/ci";
 import { Dropdown, Menu, MenuButton, MenuItem, menuItemClasses } from "@mui/base";
 import Filter from "./Filter";
-import User from "./User";
+// import User from "./User";
 import DeleteClient from "./Delete";
 import EditClient from "./EditClient";
+import CreateClient from "./CreateClient";
 
 
 
@@ -199,21 +200,10 @@ const handleOpenEditModal = (client) => {
 
       <DeleteClient open={openDeleteModal} setOpen={setOpenDeleteModal} userId={selectedUserId} />
       <Filter open={openFilters} setOpen={setOpenFilters} />
-      <User open={openUser} setOpen={setOpenUser} />
+      {/* <User open={openUser} setOpen={setOpenUser} /> */}
+      <CreateClient open={openUser} setOpen={setOpenUser} />
 
-
-<div className="flex justify-end px-4 pt-2">
-  <button
-    onClick={() => setOpenUser(true)}
-    className="bg-primary-red hover:bg-red-400 transition-all text-white w-[44px] h-[44px] flex justify-center items-center rounded-full shadow-xl"
-    aria-label="Add Client"
-  >
-    <Add />
-  </button>
-</div>
-<EditClient open={openEditModal} setOpen={setOpenEditModal} client={selectedClient} />
-
-      <Topbar />
+      <Topbar onAddClick={() => setOpenUser(true)} />
       <Table
         rows={clients}
         columns={columns}

@@ -6,6 +6,7 @@ import { Chip, FormControl, Input, InputAdornment, Tooltip } from "@mui/material
 import { PiMagnifyingGlass } from "react-icons/pi";
 import { FiFilter } from "react-icons/fi";
 import CreateUser from "./CreateEmployee";
+import CreateClient from "./CreateClient";
 import Filter from "./Filter";
 import { searchUserReducer } from "../../redux/reducer/user";
 
@@ -26,6 +27,8 @@ const Topbar = ({ view, setView, setIsFiltered, isFiltered }) => {
   const [open, setOpen] = useState(false);
   const [openFilters, setOpenFilters] = useState(false);
   const [scroll, setScroll] = useState("paper");
+  const [openClient, setOpenClient] = useState(false);
+  const [scrollClient, setScrollClient] = useState("paper");
 
   ///////////////////////////////////////// USE EFFECTS ///////////////////////////////////////////////////
   useEffect(() => {
@@ -38,6 +41,11 @@ const Topbar = ({ view, setView, setIsFiltered, isFiltered }) => {
   }, [open]);
 
   ///////////////////////////////////////// FUNCTIONS ///////////////////////////////////////////////////
+  const handleCreateClientOpen = (scrollType) => () => {
+    setOpenClient(true);
+    setScrollClient(scrollType);
+  };
+
   const handleSearch = (searchTerm) => {
     dispatch(searchUserReducer(searchTerm));
   }
@@ -120,10 +128,18 @@ const Topbar = ({ view, setView, setIsFiltered, isFiltered }) => {
                 />
               </FormControl>
             </div>
+            <Tooltip title="Add New Client" placement="top" arrow>
+              <div onClick={handleCreateClientOpen("body")}>
+                <button className="bg-primary-red hover:bg-red-400 transition-all text-white w-[44px] h-[44px] flex justify-center items-center rounded-full shadow-xl">
+                  <Add />
+                </button>
+              </div>
+            </Tooltip>
           </div>
         )}
       </div>
       <CreateUser open={open} scroll={scroll} setOpen={setOpen} />
+      <CreateClient open={openClient} setOpen={setOpenClient} scroll={scrollClient} />
       <Filter open={openFilters} setOpen={setOpenFilters} setIsFiltered={setIsFiltered} />
     </div>
   );
