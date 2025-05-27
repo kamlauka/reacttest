@@ -276,6 +276,11 @@ const Header = () => {
             <TimerOutlined className="mb-1" /> {date.toLocaleTimeString()}
           </Typography>
 
+          <Typography variant="body2" sx={{ ml: 2, color: 'gray' }}>
+             Time Zone: {Intl.DateTimeFormat().resolvedOptions().timeZone}
+          </Typography>
+
+
           <Tooltip title="Timer" arrow placement="bottom">
             <IconButton className="hover:text-red-400" aria-label="menu">
               <Alarm />

@@ -3,6 +3,7 @@ import Topbar from "./Topbar";
 import { Table } from "../../Components";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { Add } from "@mui/icons-material";
 import { getClients, getEmployeeClients } from "../../redux/action/user";
 import { getClientsReducer, getUserReducer } from "../../redux/reducer/user";
 import { Tooltip, styled } from "@mui/material";
@@ -13,6 +14,9 @@ import { Dropdown, Menu, MenuButton, MenuItem, menuItemClasses } from "@mui/base
 import Filter from "./Filter";
 import User from "./User";
 import DeleteClient from "./Delete";
+import EditClient from "./EditClient";
+
+
 
 const blue = {
   100: "#DAECFF",
@@ -137,20 +141,26 @@ const Clients = () => {
       headerName: "Action",
       width: 180,
       headerClassName: "super-app-theme--header",
-      renderCell: (params) => (
-        <div className="flex gap-[10px]">
-          {
-            loggedUser?.role != 'employee' &&
-            <Tooltip placement="top" title="Delete" arrow>
-              {" "}
-              <PiTrashLight
-                onClick={() => handleOpenDeleteModal(params.row._id)}
-                className="cursor-pointer text-red-500 text-[23px] hover:text-red-400"
-              />
-            </Tooltip>
-          }
-        </div>
-      ),
+renderCell: (params) => (
+  <div className="flex gap-[10px]">
+    {loggedUser?.role !== "employee" && (
+      <>
+        <Tooltip placement="top" title="Delete" arrow>
+          <PiTrashLight
+            onClick={() => handleOpenDeleteModal(params.row._id)}
+            className="cursor-pointer text-red-500 text-[23px] hover:text-red-400"
+          />
+        </Tooltip>
+        <Tooltip placement="top" title="Edit" arrow>
+          <CiEdit
+            onClick={() => handleOpenEditModal(params.row)}
+            className="cursor-pointer text-green-500 text-[23px] hover:text-green-600"
+          />
+        </Tooltip>    
+      </>
+    )}
+  </div>
+),
     },
   ];
 
@@ -160,6 +170,7 @@ const Clients = () => {
   const [selectedUserId, setSelectedUserId] = useState("");
   const [openFilters, setOpenFilters] = useState("");
   const [openUser, setOpenUser] = useState(false);
+  const [selectedClient, setSelectedClient] = useState(null);
 
   ////////////////////////////////////// USE EFFECTS ////////////////////////////////////
   useEffect(() => {
@@ -174,10 +185,10 @@ const Clients = () => {
   const handleClickOpen = () => {
     setOpenUser(true);
   };
-  const handleOpenEditModal = (employee) => {
-    dispatch(getUserReducer(employee));
-    setOpenEditModal(true);
-  };
+const handleOpenEditModal = (client) => {
+  setSelectedClient(client);
+  setOpenEditModal(true);
+};
   const handleOpenDeleteModal = (userId) => {
     setSelectedUserId(userId);
     setOpenDeleteModal(true);
@@ -189,6 +200,18 @@ const Clients = () => {
       <DeleteClient open={openDeleteModal} setOpen={setOpenDeleteModal} userId={selectedUserId} />
       <Filter open={openFilters} setOpen={setOpenFilters} />
       <User open={openUser} setOpen={setOpenUser} />
+
+
+<div className="flex justify-end px-4 pt-2">
+  <button
+    onClick={() => setOpenUser(true)}
+    className="bg-primary-red hover:bg-red-400 transition-all text-white w-[44px] h-[44px] flex justify-center items-center rounded-full shadow-xl"
+    aria-label="Add Client"
+  >
+    <Add />
+  </button>
+</div>
+<EditClient open={openEditModal} setOpen={setOpenEditModal} client={selectedClient} />
 
       <Topbar />
       <Table
